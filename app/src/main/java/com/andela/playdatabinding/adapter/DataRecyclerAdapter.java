@@ -2,10 +2,9 @@ package com.andela.playdatabinding.adapter;
 
 
 import android.databinding.DataBindingUtil;
-import android.databinding.ViewDataBinding;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import com.andela.playdatabinding.R;
@@ -16,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DataRecyclerAdapter extends RecyclerView.Adapter<DataRecyclerAdapter.MyViewHolder>  {
+    private String TAG = DataRecyclerAdapter.class.getSimpleName();
     private List<User> users;
 
     public DataRecyclerAdapter() {
@@ -25,9 +25,6 @@ public class DataRecyclerAdapter extends RecyclerView.Adapter<DataRecyclerAdapte
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        /*View itemView = DataBindingUtil.inflate(
-                LayoutInflater.from(parent.getContext()), R.layout.recycler_item, parent, false);*/
-
         RecyclerItemBinding viewDataBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()),
                         R.layout.recycler_item, parent,false);
         return new MyViewHolder(viewDataBinding);
@@ -36,7 +33,9 @@ public class DataRecyclerAdapter extends RecyclerView.Adapter<DataRecyclerAdapte
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-
+        User user = users.get(holder.getLayoutPosition());
+        Log.i(TAG, user.getBody());
+        holder.binding.setUser(user);
     }
 
     @Override

@@ -2,7 +2,9 @@ package com.andela.playdatabinding;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 
 import com.andela.playdatabinding.adapter.DataRecyclerAdapter;
 import com.andela.playdatabinding.http.DataFetcher;
@@ -28,6 +30,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         dataRecyclerAdapter = new DataRecyclerAdapter();
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(dataRecyclerAdapter);
 
 
         dataFetcher = new DataFetcherImpl();
@@ -42,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onError(Throwable e) {
+                        Log.d("waleola", "OnError called");
 
                     }
 
@@ -56,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (subscription == null && !subscription.isUnsubscribed()) {
+        if (subscription != null && !subscription.isUnsubscribed()) {
             subscription.unsubscribe();
         }
 
