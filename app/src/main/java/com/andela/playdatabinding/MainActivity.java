@@ -1,39 +1,69 @@
 package com.andela.playdatabinding;
 
-import android.databinding.DataBindingUtil;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.View;
 
-import com.andela.playdatabinding.databinding.ActivityMainBinding;
+import com.andela.playdatabinding.adapter.DataRecyclerAdapter;
+import com.andela.playdatabinding.http.DataFetcher;
+import com.andela.playdatabinding.http.DataFetcherImpl;
 import com.andela.playdatabinding.model.User;
 
+import java.util.List;
+
+import rx.Observer;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
+
 public class MainActivity extends AppCompatActivity {
-    private User user;
-    private ActivityMainBinding binding;
-    private boolean toggle;
+    private DataFetcher dataFetcher;
+    private Subscription subscription;
+    private RecyclerView recyclerView;
+    private DataRecyclerAdapter dataRecyclerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_main);
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
-        user = new User("Waleola", "Akinsanmi");
-        binding.setUser(user);
-        binding.setMyHandlers(this);
+        setContentView(R.layout.activity_main);
+        recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        dataRecyclerAdapter = new DataRecyclerAdapter();
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(dataRecyclerAdapter);
+
+
+        dataFetcher = new DataFetcherImpl();
+        subscription = dataFetcher.fetchDataFromApi()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<List<User>>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.d("waleola", "OnError called");
+
+                    }
+
+                    @Override
+                    public void onNext(List<User> users) {
+                        dataRecyclerAdapter.swapList(users);
+                    }
+                });
+
     }
 
-    public void onClickOfButton(View v) {
-        Log.d("waleola", "Clicked the button " /*+ u.firstName + " : " + u.lastName*/);
-
-        if (toggle) {
-            user = new User("newName", "new Password");
-            toggle = false;
-        } else {
-            user = new User("Waleola", "Akinsanmi");
-            toggle = true;
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (subscription != null && !subscription.isUnsubscribed()) {
+            subscription.unsubscribe();
         }
-        binding.setUser(user);
+
     }
 }
