@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "946056141954",
+    "firebase_url": "https://playdatabinding.firebaseio.com",
+    "project_id": "playdatabinding",
+    "storage_bucket": "playdatabinding.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:946056141954:android:ba511f3d6357d385",
+        "android_client_info": {
+          "package_name": "com.andela.playdatabinding"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "946056141954-bkuaijhsgjsfq5ipn2tv2heml2u9khb3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBFzSE43jY4ocrITHQ6al0bHuvwcd9ILQ0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

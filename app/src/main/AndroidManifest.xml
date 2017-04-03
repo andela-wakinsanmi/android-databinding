@@ -1,14 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.andela.playdatabinding">
-    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <!-- Standard permissions -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+
+    <!-- Signature-only permissions -->
+    <permission
+        android:name="com.andela.playdatabinding.permission.LAYER_PUSH"
+        android:protectionLevel="signature" />
+
+    <uses-permission android:name="com.andela.playdatabinding.permission.LAYER_PUSH" />
+
+    <permission
+        android:name="com.andela.playdatabinding.permission.C2D_MESSAGE"
+        android:protectionLevel="signature" />
+
+    <uses-permission android:name="com.andela.playdatabinding.permission.C2D_MESSAGE" />
+
+    <!-- LayerClient.sendLogs() permissions -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_LOGS" />
 
     <application
+        android:name=".PlayDataApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <!-- Your custom "com.layer.sdk.PUSH" notification Receiver -->
+        <receiver android:name=".LayerPushReceiver">
+            <intent-filter>
+                <action android:name="com.layer.sdk.PUSH" />
+
+                <category android:name="com.andela.playdatabinding" />
+            </intent-filter>
+        </receiver>
+
+        <!-- Layer's GCM Receiver and Service -->
+        <receiver
+            android:name="com.layer.sdk.services.GcmBroadcastReceiver"
+            android:permission="com.google.android.c2dm.permission.SEND">
+            <intent-filter android:priority="950">
+                <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+
+                <category android:name="com.andela.playdatabinding" />
+            </intent-filter>
+        </receiver>
+
+        <service android:name="com.layer.sdk.services.GcmIntentService" />
+
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -16,6 +63,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".ChatActivity"></activity>
     </application>
 
 </manifest>

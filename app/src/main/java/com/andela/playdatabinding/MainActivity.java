@@ -1,10 +1,13 @@
 package com.andela.playdatabinding;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 
 import com.andela.playdatabinding.adapter.DataRecyclerAdapter;
 import com.andela.playdatabinding.http.DataFetcher;
@@ -28,12 +31,22 @@ public class MainActivity extends AppCompatActivity {
     private Subscription subscription;
     private RecyclerView recyclerView;
     private DataRecyclerAdapter dataRecyclerAdapter;
+    private Button button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        button = (Button) findViewById(R.id.button);
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, ChatActivity.class);
+                MainActivity.this.startActivity(intent);
+            }
+        });
         dataRecyclerAdapter = new DataRecyclerAdapter();
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(dataRecyclerAdapter);
